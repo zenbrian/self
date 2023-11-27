@@ -33,6 +33,31 @@ class MaxHeap{
 		 }
 		 cout<<val<<"Not Found!"; 
 	 }
+	 
+	 int PrintArray()
+	 {
+	 	for(int i ; i <= heap_size ; i++)
+	 	{
+	 		cout<<harr[i]<<" ";
+		 }
+		 cout<<endl;
+	 }
+	 
+	 int parent (int i)//回傳 parent node 
+	 {
+	 	return(i-1)/2 
+	 }
+	 
+	 int LeftChild (int i)//回傳 LeftChild node 
+	 {
+	 	return i*2+1; 
+	 }
+	 
+	 int RightChild (int i)//回傳 RightChild node 
+	 {
+	 	return i*2+2;
+	 }
+	 
 	 int height()
 	 {
 	 	return ceil(log2(heap_size + 1)) - 1;
