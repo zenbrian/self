@@ -1,0 +1,76 @@
+#include <iostream>
+#include <math.h>
+using namespace std;
+
+void swap(int x, int y){
+	int temp = x;
+	x = y;
+	y = temp; 
+} 
+ 
+class MaxHeap{
+	public:
+		int *harr; // 指標
+		int capacity; // heap 最大容量
+		int heap_size; // heap 當前大小
+		
+	MaxHeap(int cap)
+	{
+		capacity = cap;
+		heap_size = 0;
+		harr = new int[cap];
+	 }
+	  
+	 void linerSearch(int val)
+	 {
+	 	for(int i ; i <= heap_size ; i++)
+	 	{
+	 		if(harr[i]==val)
+	 		{
+	 			cout<<val<<"Found!";
+				 return; 
+			 }
+		 }
+		 cout<<val<<"Not Found!"; 
+	 }
+	 int height()
+	 {
+	 	return ceil(log2(heap_size + 1)) - 1;
+	 }
+};
+
+int main(){
+	MaxHeap obj(100); //heap 容量
+	
+	int option ,value;
+	do 
+	{
+		cout <<"Which function are you going to use?"<<endl;
+		cout << "新增(insert) press 1."<<endl;
+		cout << "刪除最大(deleteMax) press 2."<<endl;
+		cout << "列印整個堆積(printHeap) press 3."<<endl;
+		cout << "Exit press 0."<<endl;
+		
+		cin >> option;
+		
+		switch(option)
+		{
+			case 0 :
+				break;
+			case 1 :
+				cout << "Enter a value:";
+				cin >> value;
+				//obj.insert(value);
+				break;
+			case 4:
+				cout << "Enter a value:";
+				cin >> value;
+				obj.linerSearch(value);
+				break;
+				
+		}
+		
+	}
+	while (option != 0);
+	
+} 
