@@ -33,7 +33,12 @@ class MaxHeap{
 		 }
 		 cout<<val<<"Not Found!"; 
 	 }*/
-	 
+	 //取得當前heap_size 
+	 void get_heap_size()
+	 {
+	 	cout<<heap_size;
+	  } 
+	  
 	 int currentHeight(int i)
 	 {
 	 	return ceil (log2(i + 1));
@@ -102,23 +107,27 @@ class MaxHeap{
 	 	if(heap_size>0)
 	 	{
 	 		int lastElement = harr[heap_size-1];
+	 		harr[heap_size-1] = 0; //將lastelement 變成0 相當於不存在 
 	 		cout<<"last Element is "<<lastElement<<endl;
 	 		int i = 0;
 	 		cout<<"The heapHeight is "<< currentHeight(heap_size) <<endl;
 	 		
-			while(currentHeight(i) < currentHeight(heap_size)-1)//有問題 
+			while(currentHeight(i) < currentHeight(heap_size) && (harr[LeftChild(i)] != 0 || harr[RightChild(i)] != 0))//有問題 
 	 		{
-	 			cout<<"leftchild:"<< harr[LeftChild(i)] <<" rightchild:"<< harr[RightChild(i)] <<endl;
-			 	if(harr[LeftChild(i)] >= harr[RightChild(i)]){
-			 		cout<<harr[i]<<"swap"<<harr[LeftChild(i)]<<endl;
-			 		swap(harr[i],harr[LeftChild(i)]);
-		 			i = LeftChild(i);
-				 }
-				else if(harr[RightChild(i)] < harr[RightChild(i)]){ 
-				 	cout<<harr[i]<<"swap"<<harr[RightChild(i)]<<endl;
-				 	swap(harr[i],harr[RightChild(i)]);
-		 			i = RightChild(i);	
-				 }
+	 			cout<<"leftchild:"<< harr[LeftChild(i)] <<" rightchild:"<< harr[RightChild(i)] <<", i ="<<i<<endl;
+			 	
+				 
+				if(harr[LeftChild(i)] >= harr[RightChild(i)]){
+				 	cout<<harr[i]<<" swap "<<harr[LeftChild(i)]<<endl;
+				 	swap(harr[i],harr[LeftChild(i)]);
+			 		i = LeftChild(i);
+				}
+				else if(harr[LeftChild(i)] < harr[RightChild(i)]){ 
+					cout<<harr[i]<<" swap "<<harr[RightChild(i)]<<endl;
+					swap(harr[i],harr[RightChild(i)]);
+			 		i = RightChild(i);	
+				}
+				
 			 }
 			 heap_size--;
 			 harr[i] = lastElement;
@@ -135,11 +144,13 @@ class MaxHeap{
 
 int main(){
 	MaxHeap obj(100); //heap 容量
-	
 	int option ,value;
 	do 
 	{
 		cout<<"=========================================="<<endl;
+		cout<<"當前的Heap_size: ";
+		obj.get_heap_size();
+		cout<<endl;
 		cout <<"Which function are you going to use?"<<endl;
 		cout << "新增(insert) press 1."<<endl;
 		cout << "刪除最大(deleteMax) press 2."<<endl;
@@ -148,7 +159,7 @@ int main(){
 		cout<<"=========================================="<<endl;
 		
 		cin >> option;
-		
+		//待加入try and catch 
 		switch(option)
 		{
 			case 0 :
