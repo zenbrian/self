@@ -10,7 +10,7 @@ void swap(int &x, int &y){
  
 class MaxHeap{
 	public:
-		int *harr; // 指標
+		int *harr; 
 		int capacity; // heap 最大容量
 		int heap_size; // heap 當前大小
 		
@@ -18,12 +18,12 @@ class MaxHeap{
 	{
 		capacity = cap;
 		heap_size = 0;
-		harr = new int[cap];
+		harr = new int[cap]; //指標陣列for動態記憶體 
 	 }
 	  
-	 void linerSearch(int val)
+	 /*void linerSearch(int val)
 	 {
-	 	for(int i ; i <= heap_size ; i++)
+	 	for(int i ; i < heap_size ; i++)
 	 	{
 	 		if(harr[i]==val)
 	 		{
@@ -32,20 +32,16 @@ class MaxHeap{
 			 }
 		 }
 		 cout<<val<<"Not Found!"; 
-	 }
+	 }*/
 	 
-	 int PrintArray()
+	 int currentHeight(int i)
 	 {
-	 	for(int i ; i <= heap_size ; i++)
-	 	{
-	 		cout<<harr[i]<<" ";
-		 }
-		 cout<<endl;
+	 	return ceil (log2(i + 1));
 	 }
 	 
 	 int parent (int i)//回傳 parent node 
 	 {
-	 	return(i-1)/2 
+	 	return(i-1)/2 ;
 	 }
 	 
 	 int LeftChild (int i)//回傳 LeftChild node 
@@ -58,10 +54,83 @@ class MaxHeap{
 	 	return i*2+2;
 	 }
 	 
-	 int height()
+	 
+	 //功能1,2,3:
+	  
+	//Insert 功能 
+	 void insert(int value)
 	 {
-	 	return ceil(log2(heap_size + 1)) - 1;
+	 	if(heap_size >= capacity)
+	 	{
+	 		cout<<"heap is over flow"<<endl;
+	 		return;
+		 }
+		 //在最末端加入value 
+		 heap_size++;
+		 int i = heap_size - 1;
+		 harr[i] = value;
+		 //如果value > 他的 parent
+		 while(harr[i] > harr[parent(i)] && i!=0) 
+		 {
+		 	swap(harr[i],harr[parent(i)]);
+		 	i = parent(i);
+		 	
+		 }
 	 }
+	
+	//Print Heap 功能 
+	int PrintHeap()
+	 {
+	 	if (heap_size>0)
+	 	{
+		 
+	 	for(int i = 0 ; i < heap_size ; i++)
+	 	{
+	 		cout<<harr[i]<<" ";
+		 }
+		}
+		else
+			cout<<"The heap is emtpy";
+		 
+		cout<<endl;
+		
+	 }
+	 
+	 //DeleteMax功能 
+	 void deleteMax()//仍有問題 
+	 {
+	 	if(heap_size>0)
+	 	{
+	 		int lastElement = harr[heap_size-1];
+	 		cout<<"last Element is "<<lastElement<<endl;
+	 		int i = 0;
+	 		cout<<"The heapHeight is "<< currentHeight(heap_size) <<endl;
+	 		
+			while(currentHeight(i) < currentHeight(heap_size)-1)//有問題 
+	 		{
+	 			cout<<"leftchild:"<< harr[LeftChild(i)] <<" rightchild:"<< harr[RightChild(i)] <<endl;
+			 	if(harr[LeftChild(i)] >= harr[RightChild(i)]){
+			 		cout<<harr[i]<<"swap"<<harr[LeftChild(i)]<<endl;
+			 		swap(harr[i],harr[LeftChild(i)]);
+		 			i = LeftChild(i);
+				 }
+				else if(harr[RightChild(i)] < harr[RightChild(i)]){ 
+				 	cout<<harr[i]<<"swap"<<harr[RightChild(i)]<<endl;
+				 	swap(harr[i],harr[RightChild(i)]);
+		 			i = RightChild(i);	
+				 }
+			 }
+			 heap_size--;
+			 harr[i] = lastElement;
+			 cout<<"i="<<harr[i]<<endl;
+	 		
+	 		
+		 }
+		 else
+		 	cout<<"The heap is emtpy";
+		 cout<<endl;
+	 }
+	 
 };
 
 int main(){
@@ -70,11 +139,13 @@ int main(){
 	int option ,value;
 	do 
 	{
+		cout<<"=========================================="<<endl;
 		cout <<"Which function are you going to use?"<<endl;
 		cout << "新增(insert) press 1."<<endl;
 		cout << "刪除最大(deleteMax) press 2."<<endl;
 		cout << "列印整個堆積(printHeap) press 3."<<endl;
-		cout << "Exit press 0."<<endl;
+		cout << "離開Exit press 0."<<endl;
+		cout<<"=========================================="<<endl;
 		
 		cin >> option;
 		
@@ -85,12 +156,18 @@ int main(){
 			case 1 :
 				cout << "Enter a value:";
 				cin >> value;
-				//obj.insert(value);
+				obj.insert(value);
+				break;
+			case 2:
+				cout<<"Delete Max:"<<endl;
+				obj.deleteMax();
+				break;
+			case 3:
+				cout << "Print Heap:"<<endl;
+				obj.PrintHeap();
 				break;
 			case 4:
-				cout << "Enter a value:";
-				cin >> value;
-				obj.linerSearch(value);
+				cout << "the Heap height:"<<endl;
 				break;
 				
 		}
