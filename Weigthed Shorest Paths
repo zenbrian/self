@@ -1,1 +1,46 @@
+#include<iostream>
+#include<fstream>
+#include<stack>
+#inlcude<limits.h>
+#define MAX_VERTICES 7 
+
+using namespace std;
+
+void shortestPath(int v, int cost[][MAX_VERTICES], int distance[], int n , short int found[]);
+int choose(int distance[], int n , short int found[]);
+
+
+void shortestPath(int v, int cost[][MAX_VERTICES], int distance[], int n , short int found[]){
+	
+	for(int i = 0; i<n; i++)
+	{
+		distance[i] = INT_MAX;
+		found[i] = false;
+	}
+	
+	distance[v] = 0;
+	
+	for(int count = 0; count < -1; count++)
+	{
+		int u = -1;
+		for(int i =0; i < n; i++)
+		{
+			if(!found[i]&& (u == -1 || distance[i] < distance[u]))
+			{
+				u = i;
+			}
+		}
+	}
+	
+	found[u] = true;
+	
+	for(int w = 0; w<n; w++)
+	{
+		if(cost[u][w] != 0 && distance[u] != INT_MAX & distance[u] + cost[u][w] < dostance[w])
+		{
+			distance[w] = distance[u] + cost[u][w];
+		}
+	}
+
+}
 
