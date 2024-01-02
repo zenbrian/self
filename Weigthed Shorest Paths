@@ -1,7 +1,7 @@
 #include<iostream>
 #include<fstream>
 #include<stack>
-#inlcude<limits.h>
+#include<limits.h>
 #define MAX_VERTICES 7 
 
 using namespace std;
@@ -42,5 +42,92 @@ void shortestPath(int v, int cost[][MAX_VERTICES], int distance[], int n , short
 		}
 	}
 
+}
+
+int choose(int distance[], int n , short int found[])
+{
+	int i, min, minpos;
+	min = INT_MAX;
+	minpos = -1;
+	
+	for(i = 0; i < n; i++)
+	{
+		if(distance[i] < min && !found[i])
+		{
+			min = distance[i];
+			minpos = i;
+		}
+	 } 
+	 return minpos;
+}
+
+int main(){
+	int adjacencyMartix[MAX_VERTICES][MAX_VERTICES]
+	
+	fstream infile;
+	infile.open("input1.txt",ios::in)
+	if(!infile.is_open())
+	{
+		cout<<"無法打開文件"<<endl;
+		return -1; 
+	}
+	
+	for(int i = 0 ; i < MAX_VERTICES ; i++)
+	{
+		for(int j = 0; j < MAX_VERTICES ; j++)
+		{
+			infile >> adjacencyMatrix[i][j]
+		}
+	}
+	infile.close();
+	
+	int source;
+	cout <<"輸入起始點(0到"<<MAX_VERTICES - 1 <<"):";
+	cin >> source;
+	
+	if(source < 0 || source >= MAX_VERTICES)
+	{
+		cout<<"輸入的起始點無效!"<<endl;
+		return -1 ; 
+	}
+	
+	int distance[MAX_VERTICES];
+	short int found[MAX_VERTICES];
+	
+	shortestPath(source, adjacencyMartix, distance, MAX_VERTICES , found);
+	
+	for(int i = 0; i < MAX_VERTICES; i++)
+	{
+		if(i != source){
+			stack<int> path;
+			int j = i;
+ 		}
+ 		if(distance[j] == INT_MAX){
+ 			cout<<"無法達到節點"<< i << endl; 
+		}
+		
+		while(j != source)
+		{
+			for(int k = 0; k < MAX_VERTICES; k++)
+			{
+				if(adjacencyMartix[k][j]!=0 && distance[j] = adjacencyMartix[k][j] == distance[k])
+				{
+					path.push(k);
+					j = k;
+					break;
+				}
+			}
+		}
+		
+		cout<<"從"<< source <<"到"<< i <<"的最短路徑";
+		while(!path.empty())
+		{
+			cout << path.top() << " ";
+			path.pop();
+		 } 
+		 cout<<"(長度為"<< distance[i]<<")"<<endl; 
+	}
+	
+	
 }
 
