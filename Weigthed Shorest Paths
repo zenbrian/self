@@ -1,133 +1,108 @@
-#include<iostream>
-#include<fstream>
-#include<stack>
-#include<limits.h>
-#define MAX_VERTICES 7 
+#include <iostream>
+#include <fstream>
+#include <stack>
+#include <limits.h>
+#define MAX_VERTICES 7
 
 using namespace std;
 
-void shortestPath(int v, int cost[][MAX_VERTICES], int distance[], int n , short int found[]);
-int choose(int distance[], int n , short int found[]);
+class Dijkstra {
+public:
+    Dijkstra(int v, int cost[][MAX_VERTICES], int distance[], int n, bool found[]) {
+        // 初始化距離和是否找到陣列
+        for (int i = 0; i < n; ++i) {
+            distance[i] = INT_MAX;
+            found[i] = false;
+        }
+        
+		// 設定起點的距離為 0
+        distance[v] = 0;
 
+        // 為除了給定節點外的所有節點找到最短路徑
+        for (int count = 0; count < n - 1; ++count) {
+            int u = -1;
+            for (int i = 0; i < n; ++i) {
+                if (found[i] == false && (u == -1 || distance[i] < distance[u])) {
+                    u = i;
+                }
+            }
+            // 將給定節點標記為已找到
+            found[u] = true;
 
-void shortestPath(int v, int cost[][MAX_VERTICES], int distance[], int n , short int found[]){
-	
-	for(int i = 0; i<n; i++)
-	{
-		distance[i] = INT_MAX;
-		found[i] = false;
-	}
-	
-	distance[v] = 0;
-	
-	for(int count = 0; count < -1; count++)
-	{
-		int u = -1;
-		for(int i =0; i < n; i++)
-		{
-			if(!found[i]&& (u == -1 || distance[i] < distance[u]))
-			{
-				u = i;
-			}
-		}
-	}
-	
-	found[u] = true;
-	
-	for(int w = 0; w<n; w++)
-	{
-		if(cost[u][w] != 0 && distance[u] != INT_MAX & distance[u] + cost[u][w] < dostance[w])
-		{
-			distance[w] = distance[u] + cost[u][w];
-		}
-	}
+            // 更新與所選節點相鄰的節點的距離值
+            for (int w = 0; w < n; ++w) {
+                if (cost[u][w] != 0 && distance[u] != INT_MAX && distance[u] + cost[u][w] < distance[w]) {
+                    distance[w] = distance[u] + cost[u][w];
+                }
+            }
+        }
+    }
+};
 
+int main() {
+    int adjacencyMatrix[MAX_VERTICES][MAX_VERTICES];
+
+    fstream infile;
+    infile.open("input1.txt", ios::in);
+    if (!infile.is_open()) {
+        cout << "無法打開文件！" << endl;
+        return -1;
+    }
+
+    for (int i = 0; i < MAX_VERTICES; ++i) {
+        for (int j = 0; j < MAX_VERTICES; ++j) {
+            infile >> adjacencyMatrix[i][j];
+        }
+    }
+    infile.close();
+
+    // 使用者輸入起始點
+    int source;
+    cout << "請輸入起始點（0 到 " << MAX_VERTICES - 1 << "）: ";
+    cin >> source;
+
+    if (source < 0 || source >= MAX_VERTICES) {
+        cout << "輸入的起始點無效！" << endl;
+        return -1;
+    }
+
+    int distance[MAX_VERTICES];
+    bool found[MAX_VERTICES];
+    Dijkstra* shortestPath = new Dijkstra(source, adjacencyMatrix, distance, MAX_VERTICES, found);
+
+    // 列印走過的最短路徑
+    for (int i = 0; i < MAX_VERTICES; i++) {
+        if (i != source) {
+            stack<int> path;
+            int j = i;
+
+            // 如果距離為 INT_MAX，表示無法到達此節點
+            if (distance[j] == INT_MAX) {
+                cout << "無法到達節點 " << i << endl;
+                continue;
+            }
+
+            // 將路徑存入 stack
+            while (j != source) {
+                for (int k = 0; k < MAX_VERTICES; k++) {
+                    if (adjacencyMatrix[k][j] != 0 && distance[j] - adjacencyMatrix[k][j] == distance[k]) {
+                        path.push(k);
+                        j = k;
+                        break;
+                    }
+                }
+            }
+
+            // 印出路徑
+            cout << "從 " << source << " 到 " << i << " 的最短路徑: ";
+            while (!path.empty()) {
+                cout << path.top() << " ";
+                path.pop();
+            }
+            cout << "(長度為 " << distance[i] << ")" << endl;
+        }
+    }
+
+    delete shortestPath; // 釋放動態分配的記憶體
+    return 0;
 }
-
-int choose(int distance[], int n , short int found[])
-{
-	int i, min, minpos;
-	min = INT_MAX;
-	minpos = -1;
-	
-	for(i = 0; i < n; i++)
-	{
-		if(distance[i] < min && !found[i])
-		{
-			min = distance[i];
-			minpos = i;
-		}
-	 } 
-	 return minpos;
-}
-
-int main(){
-	int adjacencyMartix[MAX_VERTICES][MAX_VERTICES]
-	
-	fstream infile;
-	infile.open("input1.txt",ios::in)
-	if(!infile.is_open())
-	{
-		cout<<"無法打開文件"<<endl;
-		return -1; 
-	}
-	
-	for(int i = 0 ; i < MAX_VERTICES ; i++)
-	{
-		for(int j = 0; j < MAX_VERTICES ; j++)
-		{
-			infile >> adjacencyMatrix[i][j]
-		}
-	}
-	infile.close();
-	
-	int source;
-	cout <<"輸入起始點(0到"<<MAX_VERTICES - 1 <<"):";
-	cin >> source;
-	
-	if(source < 0 || source >= MAX_VERTICES)
-	{
-		cout<<"輸入的起始點無效!"<<endl;
-		return -1 ; 
-	}
-	
-	int distance[MAX_VERTICES];
-	short int found[MAX_VERTICES];
-	
-	shortestPath(source, adjacencyMartix, distance, MAX_VERTICES , found);
-	
-	for(int i = 0; i < MAX_VERTICES; i++)
-	{
-		if(i != source){
-			stack<int> path;
-			int j = i;
- 		}
- 		if(distance[j] == INT_MAX){
- 			cout<<"無法達到節點"<< i << endl; 
-		}
-		
-		while(j != source)
-		{
-			for(int k = 0; k < MAX_VERTICES; k++)
-			{
-				if(adjacencyMartix[k][j]!=0 && distance[j] = adjacencyMartix[k][j] == distance[k])
-				{
-					path.push(k);
-					j = k;
-					break;
-				}
-			}
-		}
-		
-		cout<<"從"<< source <<"到"<< i <<"的最短路徑";
-		while(!path.empty())
-		{
-			cout << path.top() << " ";
-			path.pop();
-		 } 
-		 cout<<"(長度為"<< distance[i]<<")"<<endl; 
-	}
-	
-	
-}
-
