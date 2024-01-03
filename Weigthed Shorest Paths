@@ -39,6 +39,24 @@ public:
     }
 };
 
+
+// 選擇具有最小距離的節點的函式// Function to choose the vertex with the minimum distance
+int choose(int distance[], int n, short int found[]) {
+    int i, min, minpos;
+    min = INT_MAX; // 設定一個初始最大值 //Set an initial maximum value
+    minpos = -1;
+
+    // 遍歷所有節點以找到最小距離// Traversal through all vertices to find the minimum distance
+    for (i = 0; i < n; i++) {
+        if (distance[i] < min && !found[i]) {
+            min = distance[i];
+            minpos = i;
+        }
+    }
+    return minpos;
+}
+
+
 int main() {
     int adjacencyMatrix[MAX_VERTICES][MAX_VERTICES];
 
